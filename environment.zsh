@@ -9,6 +9,10 @@
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
 
+# Git magic
+autoload -Uz git-escape-magic
+git-escape-magic
+
 # General
 setopt BRACE_CCL          # Allow brace character class list expansion.
 setopt RC_QUOTES          # Allow 'Henry''s Garage' instead of 'Henry'\''s Garage'.
