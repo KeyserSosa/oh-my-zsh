@@ -1,0 +1,56 @@
+#
+# A theme for my use
+# Based off of the theme by paradox
+#
+# Authors:
+#   Sorin Ionescu <paradox.ionescu@gmail.com>
+#   Jeff Sandberg <paradox460@gmail.com>
+#
+# Screenshots:
+#   http://i.imgur.com/aipDQ.png
+#
+
+function prompt_paradox_precmd () {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+
+  if (( $+functions[git-info] )); then
+    git-info
+  fi
+}
+
+function prompt_paradox_setup() {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent subst)
+
+  autoload -Uz add-zsh-hook
+  add-zsh-hook precmd prompt_paradox_precmd
+
+  zstyle ':omz:completion' indicator '%B%F{red}...%f%b'
+  zstyle ':omz:prompt' vicmd '%F{yellow}❮%f%B%F{red}❮%f%b%F{red}❮%f'
+  zstyle ':omz:plugin:git:prompt' action '%F{red}(%s)%f '
+  zstyle ':omz:plugin:git:prompt' added '%%B%F{green}✚%f%%b'
+  zstyle ':omz:plugin:git:prompt' ahead '%%B%F{yellow}⬆%f%%b'
+  zstyle ':omz:plugin:git:prompt' behind '%%B%F{yellow}⬇%f%%b'
+  zstyle ':omz:plugin:git:prompt' branch '%F{blue}%b%f'
+  zstyle ':omz:plugin:git:prompt' deleted '%%B%F{red}✖%f%%b'
+  zstyle ':omz:plugin:git:prompt' modified '%%B%F{yellow}✱%f%%b'
+  zstyle ':omz:plugin:git:prompt' renamed '%%B%F{magenta}➜%f%%b'
+  zstyle ':omz:plugin:git:prompt' commit '%c'
+  zstyle ':omz:plugin:git:prompt' stashed '%%B%F{cyan}✭%f%%b'
+  zstyle ':omz:plugin:git:prompt' unmerged '%%B%F{yellow}═%f%%b'
+  zstyle ':omz:plugin:git:prompt' untracked '%%B%F{white}◼%f%%b'
+  zstyle ':omz:plugin:git:prompt' prompt ' %F{yellow}on branch %b %s%f%A%B%S%a%d%m%r%U%u'
+
+  PROMPT='
+%B%F{blue}%n%F{red}@%F{green}%m%f%b in %B%~%f${git_prompt_info}%b
+$ '
+  RPROMPT='[%D{%l:%M:%S %p}]'
+  # PROMPT='%F{cyan}%1~%f${git_prompt_info} %(!.%B%F{red}#%f%b.%B%F{green}❯%f%b) '
+  # RPROMPT='%(?::%F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_rprompt_info}'
+  SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
+}
+
+prompt_paradox_setup "$@"
+

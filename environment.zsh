@@ -33,16 +33,16 @@ cdpath=(
 )
 
 infopath=(
-  $HOME/.tilde/share/info
-  $HOME/.tilde/opt/share/info
+  $HOME/share/info
+  $HOME/opt/share/info
   /usr/local/share/info
   /usr/share/info
   $infopath
 )
 
 manpath=(
-  $HOME/.tilde/share/man
-  $HOME/.tilde/opt/share/man
+  $HOME/share/man
+  $HOME/opt/share/man
   /usr/local/share/man
   /usr/share/man
   $manpath
@@ -53,8 +53,10 @@ for path_file in /etc/manpaths.d/*(.N); do
 done
 
 path=(
-  $HOME/.tilde/{bin,sbin}
-  $HOME/.tilde/opt/{bin,sbin}
+  $HOME/{.bin,sbin}
+  $HOME/.rbenv/bin
+  /Applications/android-sdk-macosx/platform-tools:
+  $HOME/opt/{bin,sbin}
   /usr/local/{bin,sbin}
   /usr/{bin,sbin}
   /{bin,sbin}
