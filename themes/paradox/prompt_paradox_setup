@@ -1,31 +1,75 @@
 #
 # A theme for my use
-# Based off of the theme by paradox
+# Based off of the theme by sorin
 #
 # Authors:
 #   Sorin Ionescu <paradox.ionescu@gmail.com>
 #   Jeff Sandberg <paradox460@gmail.com>
 #
 # Screenshots:
-#   http://i.imgur.com/aipDQ.png
 #
 
-function prompt_paradox_precmd () {
+# Start a timer
+timer=0
+function timer_start {
+  timer=${timer:-$SECONDS}
+}
+# Stop said timer
+function timer_stop {
+  timer_result=$(($SECONDS - $timer))
+  unset timer
+}
+# Separator
+function separator {
+  local color
+  if [ $? -eq 0 ]; then
+    color="%F{green}"
+  else
+    color="%F{red}"
+  fi
+
+  if [[ $timer_result -ge 3600 ]]; then
+    let "timer_hours = $timer_result / 3600"
+    let "remainder = $timer_result % 3600"
+    let "timer_minutes = $remainder / 60"
+    let "timer_seconds = $remainder % 60"
+    echo "%B%F{red}>>> elapsed time ${timer_hours}h${timer_minutes}m${timer_seconds}s%f%b"
+  elif [[ $timer_result -ge 60 ]]; then
+    let "timer_minutes = $timer_result / 60"
+    let "timer_seconds = $timer_result % 60"
+    echo "%B%F{yellow}>>> elapsed time ${timer_minutes}m${timer_seconds}s%f%b"
+  elif [[ $timer_result > 10 ]]; then
+    echo "%B%F{green}>>> elapsed time ${timer_result}s%f%b"
+  fi
+  echo "%B${color}${(l:(($COLUMNS-1))::─:)}%f%b" # $COLUMNS-1 prevents tab from clobbering, and aligns with rprompt
+}
+
+# Executed before each prompt
+function prompt_paradox_precmd() {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
 
   if (( $+functions[git-info] )); then
     git-info
   fi
+  if [ "$timer" ]; then
+    timer_stop
+  fi
+}
+
+# Executed just before a command is run
+function prompt_paradox_preexec() {
+  timer_start
 }
 
 function prompt_paradox_setup() {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
-  prompt_opts=(cr percent subst)
+  prompt_opts=(cr percent subst sp)
 
   autoload -Uz add-zsh-hook
   add-zsh-hook precmd prompt_paradox_precmd
+  add-zsh-hook preexec prompt_paradox_preexec
 
   zstyle ':omz:completion' indicator '%B%F{red}...%f%b'
   zstyle ':omz:prompt' vicmd '%F{yellow}❮%f%B%F{red}❮%f%b%F{red}❮%f'
@@ -44,9 +88,10 @@ function prompt_paradox_setup() {
   zstyle ':omz:plugin:git:prompt' prompt ' %F{yellow}on branch %b %s%f%A%B%S%a%d%m%r%U%u'
 
   PROMPT='
-%B%F{blue}%n%F{red}@%F{green}%m%f%b in %B%~%f${git_prompt_info}%b
+$(separator)
+%B%F{blue}%n%f%F{red}@%f%F{green}%m%f%b in %B%~%f${git_prompt_info}%b
 $ '
-  RPROMPT='[%D{%l:%M:%S %p}]'
+  RPROMPT='${VIM:+" %B%F{green}V%f%b"}[%D{%l:%M:%S %p}]'
   # PROMPT='%F{cyan}%1~%f${git_prompt_info} %(!.%B%F{red}#%f%b.%B%F{green}❯%f%b) '
   # RPROMPT='%(?::%F{red}⏎%f)${VIM:+" %B%F{green}V%f%b"}${git_rprompt_info}'
   SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
