@@ -3,6 +3,7 @@
 #
 # Authors:
 #   Sorin Ionescu <sorin.ionescu@gmail.com>
+#   Christopher Slowe <me@keysersosa.com>
 #
 
 # Set the key mapping style to 'emacs' or 'vi'.
@@ -33,3 +34,17 @@ source "$HOME/.oh-my-zsh/init.zsh"
 
 # Customize to your needs...
 
+path=(~/bin /opt/local/lib/postgresql91/bin /opt/local/libexec/gnubin/ /opt/local/bin /opt/local/sbin /usr/local/bin /opt/local/Library/Frameworks/Python.framework/Versions/2.7/bin/ $path)
+
+
+autoload -Uz promptinit
+promptinit
+prompt keysersosa
+
+if [ "$TERM" != "dumb" ]; then
+    export LS_OPTIONS='--color=auto -F'
+    eval `dircolors ~/.dir_colors`
+fi
+
+. ~/.aliases
+stty erase '^?'

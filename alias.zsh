@@ -46,10 +46,10 @@ alias sl='ls'            # I often screw this up.
 alias _='sudo'
 alias b="$BROWSER"
 alias cd='nocorrect cd'
-alias cp='nocorrect cp -i'
 alias df='df -kh'
 alias du='du -kh'
-alias e="$EDITOR"
+alias e="screen_title emacs; emacs -bg black -fg white; screen_title zsh"
+alias ip="screen_title ipython; ipython; screen_title zsh"
 alias find='noglob find'
 alias fc='noglob fc'
 alias gcc='nocorrect gcc'
@@ -58,13 +58,11 @@ alias ln='nocorrect ln -i'
 alias locate='noglob locate'
 alias man='nocorrect man'
 alias mkdir='nocorrect mkdir -p'
-alias mv='nocorrect mv -i'
 alias p="$PAGER"
 alias po='popd'
 alias pu='pushd'
 alias rake='noglob rake'
-alias rm='nocorrect rm -i'
-alias scp='nocorrect scp'
+alias scp='noglob scp'
 alias type='type -a'
 
 # Mac OS X
