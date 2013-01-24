@@ -47,5 +47,7 @@ if [ "$TERM" != "dumb" ]; then
     eval `dircolors ~/.dir_colors`
 fi
 
+unsetopt noclobber
+unsetopt noglob
 . ~/.aliases
 stty erase '^?'
